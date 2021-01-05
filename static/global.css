@@ -1,0 +1,84 @@
+:root {
+  --main-bg-color: white;
+  --top-bg-color: #210966;
+  --bottom-bg-color: #292424;
+  --icon-bg-color: #FF003D;
+  --btn-primary-bg-color: white;
+  --btn-raise-bg-color: #4B4A4E;
+  --btn-text-color: #4B4A4E;
+  --btn-border-left-color: #FF003D;
+  --btn-border-right-color: #210966;
+  --input-text-color: #9B9B9B;
+}
+
+body {
+  margin:0;
+  padding:0;
+  height: 100vh;
+  background-color: var(--main-bg-color);
+  top:0;
+}
+
+.element-lvl1 {
+  max-width:400px;
+  min-width:200px;
+  min-height:15px;
+  max-height:100px;
+}
+
+.btn {
+  margin: 15px auto 15px auto;
+  padding: 5px 5% 5px 5%;
+  display:block;
+  /* text */
+  font-style: normal;
+  font-weight: 300;
+  font-size: 18px;
+  line-height: 21px;
+  /* identical to box height */
+  text-align: center;
+}
+
+.btn-raise {
+  background: var(--btn-raise-bg-color);
+  color: white;
+  border: 0px solid black;
+  border-radius: 25px;
+}
+
+.btn-primary {
+  position: relative;
+  color: var(--btn-text-color);
+  background-color:white;
+  border:none;
+  border-radius:25px;
+}
+
+.btn-primary::after {
+  position: absolute;
+  top: -2px; bottom: -2px;
+  left: -2px; right: -2px;
+  background: linear-gradient(to right, var(--btn-border-left-color), var(--btn-border-right-color));
+  content: '';
+  z-index: -1;
+  border-radius: 25px;
+}
+
+
+
+.input-credential {
+  background: #F1F1F1;
+  border: 0px solid transparent;
+  border-radius: 5px;
+  margin: 30px auto;
+  display:block;
+  height:2.5em;
+  padding: 3px 10px;
+
+  /* text */
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 16px;
+  color: #9B9B9B;
+}
