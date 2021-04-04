@@ -1,9 +1,11 @@
 <template>
   <div>
     <top_bar/>
+
     <div id="infinite-list" class="post-area">
-      <post_block v-for="item in items" key="Math.random()" class="post-block"/>
+      <post_block v-for="item in items" key="" class="post-block"/>
     </div>
+
     <bottom_bar/> 
   </div>
 </template>
@@ -29,7 +31,8 @@ export default {
     // Detect when scrolled to bottom.
     const listElm = document.querySelector('#infinite-list')
     listElm.addEventListener('scroll', e => {
-      if(listElm.scrollTop + listElm.clientHeight >= listElm.scrollHeight) {
+      let scrollHeightMax = listElm.scrollTop + listElm.clientHeight
+      if(scrollHeightMax+listElm.scrollHeight/25 >= listElm.scrollHeight) {
         this.loadMore()
       }
     })
@@ -57,6 +60,7 @@ export default {
 </script>
 
 <style scoped>
+  
   .post-area {
     height: 74vh;
     border: none;
@@ -81,8 +85,13 @@ export default {
   }
 
   .post-block {
-    max-width:70%;
+    max-width:45%;
     min-width:40%;
+    padding: 5px;
     margin: 0 auto 25px auto;
+    cursor: pointer;
+  }
+  .post-block:hover {
+    background-color: #EEEEEE
   }
 </style>

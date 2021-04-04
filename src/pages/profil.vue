@@ -1,14 +1,18 @@
 <template>
   <div>
-    <top_bar/> 
+    <top_bar/>
+    <div class="profil">
     <div class="user-picture">
-      <span>✏</span>
-      <span><img class="icon-profil" src="https://picsum.photos/seed/picsum/128/128" width="80" height="80"/></span>
-      <span>🗑</span>
+      <img class="edit" src="@/assets/edit.svg"/>
+      
+      <img class="icon-profil" src="https://picsum.photos/seed/picsum/128/128" width="80" height="80"/>
+      
+      <img class="trash" src="@/assets/trash.svg"/>
+      
     </div>
     <div class="info-user">
-      <span class="info-user_fullname">{{fullname_user}}</span>
-      <span class="info-user_email">EMAIL HERE</span>
+      <span class="info-user_fullname"><b>{{fullname_user}}</b></span>
+      <span class="info-user_email">here.sample@email.com</span>
       <div class="stat-activity">
         <span>67 abonnés - 98 abonnements</span>
         <br/>
@@ -17,8 +21,11 @@
     </div>
     <hr/>
 
-    <button class="btn btn-raise element-lvl1 deconnection" @click="$router.push('/')">Déconnexion</button>
-    <img src="@/assets/illustration.svg" />
+    <button class="btn btn-raise element-lvl1 deconnection" @click="$router.push('/')">
+      Déconnexion
+    </button>
+    <!-- <img src="@/assets/illustration.svg" /> -->
+    </div>
     <bottom_bar/> 
   </div>
 </template>
@@ -44,7 +51,16 @@ export default {
 </script>
 
 <style scoped>
-
+.trash{
+  border: 1px solid #FF003D;
+  border-radius: 50%;
+  padding:15px;
+}
+.edit{
+  border: 1px solid #210966;
+  border-radius: 50%;
+  padding:15px;
+}
 .deconnection {
   background-color: #FF003D;
 }
@@ -66,9 +82,16 @@ export default {
   display: flex;
   flex-direction:row;
   flex-wrap:nowrap;
-  justify-content:space-evenly;
+  justify-content:center;
   align-items:center;
   margin-top: 10px;
+  
+}
+.profil{
+  height:75vh;
+}
+.user-picture img {
+  margin: 0 50px;
 }
 
 .info-user {

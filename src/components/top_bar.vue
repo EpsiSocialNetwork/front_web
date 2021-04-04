@@ -30,6 +30,7 @@ export default {
   justify-content:space-evenly;
   align-items:center;
   padding:15px;
+  height:10vh;
 }
 .icon-profil {
   border-radius:50%;

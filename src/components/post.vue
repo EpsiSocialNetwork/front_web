@@ -1,14 +1,12 @@
 <template>
-  <div>
-    <top_bar/>
-    <br/>
-    <div>
+  <div class="post">
+
+    <div class="window">
+      <span class="close_cross" @click="submitMsg('')">X</span>
       <textarea class="text-area" v-model="text" rows="8" placeholder="Votre post..." cols="45"></textarea>
       <br/>
       <button class="btn-primary" @click="submitMsg(text)">Envoyer</button>
     </div>
-    <br/>
-    <bottom_bar/> 
   </div>
 </template>
 
@@ -30,8 +28,7 @@ export default {
   mounted: function(){ },
   methods : { 
     submitMsg: function(text) {
-
-      this.$router.push('/home')
+      this.$emit('send', text)
     }
   },
   watch : {}
@@ -41,6 +38,17 @@ export default {
 <style scoped>
   .text-area {
     resize: none;
-
+  }
+  .window {
+    position:relative;
+  }
+  .close_cross{
+    position: absolute;
+    top:15px;
+    right:15px;
+  }
+  .close_cross:hover{
+    color:red;
+    background-color:#EEEEEE;
   }
 </style>
