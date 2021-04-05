@@ -8,6 +8,8 @@
 ```bash
 yarn start
 yarn build
+
+#sudo docker build -t web-front-posthoop .
 ```
 
 # Developpement
