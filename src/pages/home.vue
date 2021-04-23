@@ -3,7 +3,7 @@
     <top_bar/>
 
     <div id="infinite-list" class="post-area">
-      <post_block v-for="item in items" key="" class="post-block"/>
+      <post_block v-for="item in items" :key="item.uid" :post="item" class="post-block"/>
     </div>
 
     <bottom_bar/> 
@@ -14,6 +14,8 @@
 import top_bar from '@/components/top_bar'
 import bottom_bar from '@/components/bottom_bar'
 import post_block from '@/components/post_block'
+import axios from 'axios'
+
 export default {
   name: 'home',
   components: { top_bar, bottom_bar, post_block },
@@ -24,7 +26,11 @@ export default {
     }
   },
   created : function() {
+    // Get first post
+    const config = { method: 'get', url: 'http://post.mignon.chat/post', headers: {  'Authorization': `Bearer ${this.$root.keycloak.token}` } }
 
+    axios(config) .then( response => this.items=response.data)
+    .catch( error =>  console.log(error) )
   },
   mounted: function(){
     
@@ -41,9 +47,8 @@ export default {
   },
   methods : {
     loadMore () {
-      /** This is only for this demo, you could 
-        * replace the following with code to hit 
-        * an endpoint to pull in more data. **/
+      
+      /*
       this.loading = true;
       setTimeout(e => {
         for (var i = 0; i < 20; i++) {
@@ -51,7 +56,7 @@ export default {
         }
         this.loading = false;
       }, 50);
-      /**************************************/
+      */
       
     }
   },

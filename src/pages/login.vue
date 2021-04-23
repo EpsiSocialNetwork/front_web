@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   name: 'login',
   data () {
@@ -23,6 +24,9 @@ export default {
   methods : {
     login: function() {
       this.$root.user.fullname = this.fullname
+
+      
+
       this.$router.push(`${this.$root.user.fullname}`)
     }
   },
