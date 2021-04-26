@@ -11,12 +11,12 @@ Vue.use(Router)
 
 export default new Router({
   routes: [
+    { path: '/', name: 'welcome', component: welcome },
     { path: '/login', name: 'login', component: login },
     { path: '/home', name: 'home', component: home },
     { path: '/post/:uid', name: 'post', component: post },
     { path: '/setting', name: 'setting', component: setting },
-    { path: '/:fullname_user', name: 'profil', component: profil },
-    { path: '/', name: 'welcome', component: welcome },
+    //{ path: '/:fullname_user', name: 'profil', component: profil },
     //{ path: '/register', name: 'register', component: register },
     //{ path: '/:fullname_user/friend', name: 'friend', component: friend },
   ]

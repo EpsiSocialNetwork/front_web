@@ -59,7 +59,8 @@ export default {
       tags:Array,
       number_comments:0,
       view_counter:0,
-      liked:false
+      liked:false,
+      post_status:Object,
     }
   },
   created : function() {
@@ -71,7 +72,7 @@ export default {
 
     // Get like, Share, View and React
     config = { method: 'get', url: `https://react.mignon.chat/${this.post.uid}`, headers: { } }
-    axios(config).then( response => console.log(JSON.stringify(response.data)))
+    axios(config).then( response => this.post_status=response.data)
     .catch( error =>console.log(error))
 
     // Get Like for this post for this user

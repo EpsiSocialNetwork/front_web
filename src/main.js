@@ -2,6 +2,7 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
+import welcome from '@/pages/welcome'
 import router from './router'
 import * as Keycloak from 'keycloak-js'
 import VueLogger from 'vuejs-logger'
@@ -22,43 +23,31 @@ const options = {
 }
 Vue.use(VueLogger, options)
 
-
-
-
-
 //keycloak init options
 //https://keycloak.mignon.chat/auth/realms/posthoop/protocol/openid-connect/token
+
 let initOptions = {
   url: 'https://keycloak.mignon.chat/auth', realm: 'posthoop', clientId: 'api', onLoad:'login-required'
 }
 let keycloak = Keycloak(initOptions)
 
 keycloak.init({ onLoad: initOptions.onLoad }).success((auth) => {
-    
     if(!auth)
       window.location.reload()
     else
       Vue.$log.info("Authenticated")
-
-
-    // localStorage.setItem("vue-token", keycloak.token);
-    // localStorage.setItem("vue-refresh-token", keycloak.refreshToken);
-
-
-    /* eslint-disable no-new */
+    // localStorage.setItem("vue-token", keycloak.token)
+    // localStorage.setItem("vue-refresh-token", keycloak.refreshToken)
     new Vue({
       el: '#app',
       router,
       components: { App },
       template: '<App/>',
-      data:{user: {fullname: '', uid: 'FAKE_UID_USER'}, keycloak:keycloak},
+      data:{user: {fullname: '', uid: 'FAKE_UID_USER'}, keycloak:Object},
       render: h => h(App),
     }).$mount('#app')
 
-    // new Vue({
-    //   render: h => h(App),
-    // }).$mount('#app')
-  
+
     setInterval(() =>{
       keycloak.updateToken(70).success((refreshed)=>{
         if (refreshed) {
@@ -77,4 +66,3 @@ keycloak.init({ onLoad: initOptions.onLoad }).success((auth) => {
 }).error(() =>{
   Vue.$log.error("Authenticated Failed")
 })
-
