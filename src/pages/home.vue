@@ -74,8 +74,16 @@
 
       config = { method: 'get', url: `https://post.mignon.chat/post/`, headers: {  'Authorization': `Bearer ${this.$root.keycloak.token}` } }
       axios(config) .then( response => {
+        
+
         this.tab = this.shuffle(response.data).filter(e=>this.items.reduce((r,v)=>v.uid==e.uid?r=false:r=r,true))
-        this.items=[...this.items,...this.tab.slice(0,this.items.length>this.tab.length?this.tab.length-1:this.items.length-1)].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt))
+
+        const splice_index = this.items.length<10?10:this.items.length>this.tab.length?(this.tab.length-1)/2:(this.items.length-1)/2
+
+        this.items=[...this.items,...this.tab.slice(0,splice_index)].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt))
+
+
+        this.items_show=[]
         this.loadMore()
       }).catch( error =>  console.log(error) )
     },
