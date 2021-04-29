@@ -59,22 +59,22 @@
       }
     },
     created : function() {
-      let config = { method: 'get', url: `http://post.mignon.chat/post/timeline/user?uids=${this.$root.keycloak.tokenParsed.user_id}`, headers: {  'Authorization': `Bearer ${this.$root.keycloak.token}` } }
+      let config = { method: 'get', url: `https://post.mignon.chat/post/timeline/user?uids=${this.$root.keycloak.tokenParsed.user_id}`, headers: {  'Authorization': `Bearer ${this.$root.keycloak.token}` } }
       axios(config) .then( response => {
         this.post_counter=response.data.length
         this.my_post=response.data
       })
       .catch( error =>  console.log(error) )
 
-      config = { method: 'get', url: `http://user.mignon.chat/user/${this.$root.keycloak.tokenParsed.user_id}/follow`, headers: {  'Authorization': `Bearer ${this.$root.keycloak.token}` } }
+      config = { method: 'get', url: `https://user.mignon.chat/user/${this.$root.keycloak.tokenParsed.user_id}/follow`, headers: {  'Authorization': `Bearer ${this.$root.keycloak.token}` } }
       axios(config) .then( response => this.follow_counter=response.data.length)
       .catch( error =>  console.log(error) )
 
-      config = { method: 'get', url: `http://user.mignon.chat/user/${this.$root.keycloak.tokenParsed.user_id}/following`, headers: {  'Authorization': `Bearer ${this.$root.keycloak.token}` } }
+      config = { method: 'get', url: `https://user.mignon.chat/user/${this.$root.keycloak.tokenParsed.user_id}/following`, headers: {  'Authorization': `Bearer ${this.$root.keycloak.token}` } }
       axios(config) .then( response => this.follower_counter=response.data.length)
       .catch( error =>  console.log(error) )
 
-      config = { method: 'get', url: `http://user.mignon.chat/user/${this.$root.keycloak.tokenParsed.user_id}`, headers: {  'Authorization': `Bearer ${this.$root.keycloak.token}` } }
+      config = { method: 'get', url: `https://user.mignon.chat/user/${this.$root.keycloak.tokenParsed.user_id}`, headers: {  'Authorization': `Bearer ${this.$root.keycloak.token}` } }
       axios(config) .then( response => {
         if(this.fullname_user!=response.data.fullname){
           this.fullname_user=response.data.fullname

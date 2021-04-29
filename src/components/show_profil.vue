@@ -54,7 +54,7 @@
       }
     },
     created :async function() {
-      let config = { method: 'get', url: `http://user.mignon.chat/user/fullname/${this.fullname_user}`, headers: {  'Authorization': `Bearer ${this.$root.keycloak.token}` } }
+      let config = { method: 'get', url: `https://user.mignon.chat/user/fullname/${this.fullname_user}`, headers: {  'Authorization': `Bearer ${this.$root.keycloak.token}` } }
       await axios(config) .then( response => {
         this.user_id=response.data.uid
         this.description=response.data.description
@@ -63,21 +63,21 @@
       .catch( error =>  console.log(error) )
 
 
-      config = { method: 'get', url: `http://user.mignon.chat/user/${this.$root.keycloak.tokenParsed.user_id}/follow`, headers: {  'Authorization': `Bearer ${this.$root.keycloak.token}` } }
+      config = { method: 'get', url: `https://user.mignon.chat/user/${this.$root.keycloak.tokenParsed.user_id}/follow`, headers: {  'Authorization': `Bearer ${this.$root.keycloak.token}` } }
       axios(config) .then( response => response.data.map(e=>e.followUidUser).includes(this.user_id)?this.is_follow=true:this.is_follow=false).catch( error =>  console.log(error) )
 
-      config = { method: 'get', url: `http://post.mignon.chat/post/timeline/user?uids=${this.user_id}`, headers: {  'Authorization': `Bearer ${this.$root.keycloak.token}` } }
+      config = { method: 'get', url: `https://post.mignon.chat/post/timeline/user?uids=${this.user_id}`, headers: {  'Authorization': `Bearer ${this.$root.keycloak.token}` } }
       axios(config) .then( response => {
         this.post_counter=response.data.length
         this.my_post=response.data
       })
       .catch( error =>  console.log(error) )
 
-      config = { method: 'get', url: `http://user.mignon.chat/user/${this.user_id}/follow`, headers: {  'Authorization': `Bearer ${this.$root.keycloak.token}` } }
+      config = { method: 'get', url: `https://user.mignon.chat/user/${this.user_id}/follow`, headers: {  'Authorization': `Bearer ${this.$root.keycloak.token}` } }
       axios(config) .then( response => this.follow_counter=response.data.length)
       .catch( error =>  console.log(error) )
 
-      config = { method: 'get', url: `http://user.mignon.chat/user/${this.user_id}/following`, headers: {  'Authorization': `Bearer ${this.$root.keycloak.token}` } }
+      config = { method: 'get', url: `https://user.mignon.chat/user/${this.user_id}/following`, headers: {  'Authorization': `Bearer ${this.$root.keycloak.token}` } }
       axios(config) .then( response => this.follower_counter=response.data.length)
       .catch( error =>  console.log(error) )
 

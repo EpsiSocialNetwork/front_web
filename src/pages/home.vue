@@ -63,16 +63,16 @@
       return array;
     },
     get_following_user_uid:async function(){      
-      const config = { method: 'get', url: `http://user.mignon.chat/user/${this.$root.keycloak.tokenParsed.user_id}/follow`, headers: {  'Authorization': `Bearer ${this.$root.keycloak.token}` } }
+      const config = { method: 'get', url: `https://user.mignon.chat/user/${this.$root.keycloak.tokenParsed.user_id}/follow`, headers: {  'Authorization': `Bearer ${this.$root.keycloak.token}` } }
       await axios(config) .then( response => this.following_user_uid=response.data)
       .catch( error =>  console.log(error) )
     },
     async reload_after_send_post(){
-      let config = { method: 'get', url: `http://post.mignon.chat/post/timeline/user?uids=${[this.$root.keycloak.tokenParsed.user_id,...this.following_user_uid.map(e=>e.followUidUser)].join`,`}`, headers: {  'Authorization': `Bearer ${this.$root.keycloak.token}` } }
+      let config = { method: 'get', url: `https://post.mignon.chat/post/timeline/user?uids=${[this.$root.keycloak.tokenParsed.user_id,...this.following_user_uid.map(e=>e.followUidUser)].join`,`}`, headers: {  'Authorization': `Bearer ${this.$root.keycloak.token}` } }
       await axios(config) .then( response => this.items=response.data )
       .catch( error =>  console.log(error) )
 
-      config = { method: 'get', url: `http://post.mignon.chat/post/`, headers: {  'Authorization': `Bearer ${this.$root.keycloak.token}` } }
+      config = { method: 'get', url: `https://post.mignon.chat/post/`, headers: {  'Authorization': `Bearer ${this.$root.keycloak.token}` } }
       axios(config) .then( response => {
         this.tab = this.shuffle(response.data).filter(e=>this.items.reduce((r,v)=>v.uid==e.uid?r=false:r=r,true))
         this.items=[...this.items,...this.tab.slice(0,this.items.length>this.tab.length?this.tab.length-1:this.items.length-1)].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt))
