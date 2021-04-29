@@ -1,5 +1,5 @@
 <template>
-  <div class="post">
+  <div class="post_textarea">
 
     <div class="window">
       <span class="close_cross" @click="submitMsg('')">X</span>
@@ -15,7 +15,7 @@ import top_bar from '@/components/top_bar'
 import bottom_bar from '@/components/bottom_bar'
 
 export default {
-  name: 'post',
+  name: 'post_textarea',
   components: { top_bar, bottom_bar },
   data () {
     return {

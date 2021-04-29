@@ -3,14 +3,16 @@
     <h1>👋 Welcome on PostHoop</h1>
     <img src="@/assets/logo.svg"/>
     <p>Modelez votre Hoop sphère à votre image.</p>
-    <button class="btn btn-primary element-lvl1" @click="login()">Inscription</button>
-    <button class="btn btn-primary element-lvl1" @click="login()">Connexion</button>
+
+
+    <button class="btn btn-primary element-lvl1" @click="login">Inscription</button>
+    <button class="btn btn-primary element-lvl1" @click="login">Connexion</button>
   </div>
 </template>
 
 <script>
-  import * as Keycloak from 'keycloak-js'
-
+  import Vue from 'vue'
+  import login from '@/pages/login'
   export default {
     name: 'welcome',
     data () {
@@ -20,35 +22,44 @@
     },
     methods : {
       login: function() {
+        this.$router.push('/login')
+        /*new Vue({
+          el: '#welcome',
+          components: { login },
+          template: '<login/>'
+        })*/
+        /*this.$destroy()
+        this.$el.parentNode.removeChild(this.$el)
+        this.keycloak = Keycloak(this.initOptions)
+        
+        this.keycloak.init({ onLoad: this.initOptions.onLoad }).then( (auth) => {
+          console.log(this.keycloak)
+          if(!auth)
+            window.location.reload()
+          else
+            Vue.$log.info("Authenticated")
+          new Vue({
+            el: '#app',
+            router,
+            components: { App },
+            template: '<App/>',
+            data:{user: {fullname: '', uid: 'FAKE_UID_USER'}, keycloak:this.keycloak},
+            render: h => h(App),
+          }).$mount('#app')
 
-        let initOptions = {
-          url: 'https://keycloak.mignon.chat/auth', realm: 'posthoop', clientId: 'api', onLoad:'login-required'
-        }
-        let keycloak = Keycloak(initOptions)
-
-        //keycloak.init({ onLoad: initOptions.onLoad }).success((auth) => console.log(auth))
-        // keycloak.init({ onLoad: initOptions.onLoad }).success((auth) => {
-        //   this.$router.push('/home')
-        //   if(!auth) {
-        //     Vue.$log.info("Authentification FAILED !")
-        //   } else {
-        //     Vue.$log.info("Authenticated")
-        //     this.$root.keycloak=keycloak
-        //     setInterval(() =>{
-        //       keycloak.updateToken(70).success((refreshed)=>{
-        //         if (refreshed) {
-        //           Vue.$log.debug('Token refreshed')
-        //         } else {
-        //           Vue.$log.warn('Token not refreshed, valid for '
-        //             + Math.round(keycloak.tokenParsed.exp + keycloak.timeSkew - new Date().getTime() / 1000) + ' seconds')
-        //         }
-        //       }).error(()=> Vue.$log.error('Failed to refresh token'))
-        //     }, 60000)
-
-            
-        //   }
-        // }).error(() => Vue.$log.error("Authenticated Failed"))
-      }
+          setInterval(() =>{
+            this.keycloak.updateToken(70).then((refreshed)=>{
+              if (refreshed) {
+                Vue.$log.debug('Token refreshed')
+              } else {
+                Vue.$log.warn('Token not refreshed, valid for '
+                  + Math.round(this.keycloak.tokenParsed.exp + this.keycloak.timeSkew - new Date().getTime() / 1000) + ' seconds')
+              }
+            }).catch( ()=>Vue.$log.error('Failed to refresh token') )
+          }, 60000)
+        }).catch(() => Vue.$log.error("Authenticated Failed"))*/
+        
+      } 
     },
     watch : {}
   }

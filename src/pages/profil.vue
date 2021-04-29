@@ -1,31 +1,9 @@
 <template>
   <div>
     <top_bar/>
-    <div class="profil">
-    <div class="user-picture">
-      <img class="edit" src="@/assets/edit.svg"/>
-      
-      <img class="icon-profil" src="https://picsum.photos/seed/picsum/128/128" width="80" height="80"/>
-      
-      <img class="trash" src="@/assets/trash.svg"/>
-      
-    </div>
-    <div class="info-user">
-      <span class="info-user_fullname"><b>{{fullname_user}}</b></span>
-      <span class="info-user_email">here.sample@email.com</span>
-      <div class="stat-activity">
-        <span>67 abonnés - 98 abonnements</span>
-        <br/>
-        <span>24 posts</span>
-      </div>
-    </div>
-    <hr/>
+      <my_profil v-if="$root.keycloak.tokenParsed.name.replace(' ','_')==$route.params.fullname_user"/>
+      <show_profil v-else/>
 
-    <button class="btn btn-raise element-lvl1 deconnection" @click="$router.push('/')">
-      Déconnexion
-    </button>
-    <!-- <img src="@/assets/illustration.svg" /> -->
-    </div>
     <bottom_bar/> 
   </div>
 </template>
@@ -33,19 +11,21 @@
 <script>
 import top_bar from '@/components/top_bar'
 import bottom_bar from '@/components/bottom_bar'
+import my_profil from '@/components/my_profil'
+import show_profil from '@/components/show_profil'
+import axios from 'axios'
 
 export default {
   name: 'profil',
-  components: { top_bar, bottom_bar },
+  components: { top_bar, bottom_bar,my_profil,show_profil },
   data () {
-    return {
-      fullname_user : this.$route.params.fullname_user
-    }
+    return {}
   },
   created : function() {
-
+    
   },
-  methods : {},
+  methods : {
+  },
   watch : {}
 }
 </script>

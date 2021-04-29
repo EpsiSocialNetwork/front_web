@@ -1,6 +1,11 @@
 // vue.config.js
 module.exports = {
-  devServer: {
-        proxy: 'http://post.mignon.chat/post',
+  configureWebpack: {
+    devServer: {
+      watchOptions: {
+        ignored: /node_modules/,
+        poll: 1000
+      }
     }
+  }
 }

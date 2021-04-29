@@ -6,34 +6,32 @@
       <post_block v-for="item in items" :key="item.uid" :post="item" class="post-block"/>
     </div>
 
-    <bottom_bar/> 
+    <bottom_bar @reload_after_send_post="reload_after_send_post"/> 
   </div>
 </template>
 
 <script>
-import top_bar from '@/components/top_bar'
-import bottom_bar from '@/components/bottom_bar'
-import post_block from '@/components/post_block'
-import axios from 'axios'
+  import top_bar from '@/components/top_bar'
+  import bottom_bar from '@/components/bottom_bar'
+  import post_block from '@/components/post_block'
+  import axios from 'axios'
 
-export default {
-  name: 'home',
-  components: { top_bar, bottom_bar, post_block },
-  data () {
-    return {
-      loading: false,
-      items: []
-    }
-  },
-  created : function() {
+  export default {
+    name: 'home',
+    components: { top_bar, bottom_bar, post_block },
+    data () {
+      return {
+        loading: false,
+        items: []
+      }
+    },
+    created : function() {
     // Get first post
-    const config = { method: 'get', url: 'http://post.mignon.chat/post', headers: {  'Authorization': `Bearer ${this.$root.keycloak.token}` } }
-
-    axios(config) .then( response => this.items=response.data)
-    .catch( error =>  console.log(error) )
+    this.reload_after_send_post()
+    
   },
   mounted: function(){
-    
+
     // Detect when scrolled to bottom.
     const listElm = document.querySelector('#infinite-list')
     listElm.addEventListener('scroll', e => {
@@ -46,8 +44,14 @@ export default {
     this.loadMore()
   },
   methods : {
+    reload_after_send_post(){
+      const config = { method: 'get', url: 'http://post.mignon.chat/post', headers: {  'Authorization': `Bearer ${this.$root.keycloak.token}` } }
+
+      axios(config) .then( response => this.items=response.data.reverse())
+      .catch( error =>  console.log(error) )  
+    },
     loadMore () {
-      
+
       /*
       this.loading = true;
       setTimeout(e => {
@@ -65,9 +69,9 @@ export default {
 </script>
 
 <style scoped>
-  
+
   .post-area {
-    height: 74vh;
+    height: 78vh;
     border: none;
     padding: 5px;
     overflow: scroll;
@@ -90,13 +94,12 @@ export default {
   }
 
   .post-block {
-    max-width:45%;
+    max-width:75%;
     min-width:40%;
     padding: 5px;
     margin: 0 auto 25px auto;
-    cursor: pointer;
   }
   .post-block:hover {
-    background-color: #EEEEEE
+    background-color: #F9F9F9
   }
 </style>

@@ -9,6 +9,8 @@
 yarn start
 yarn build
 
+yarn serve
+sudo yarn global add @vue/cli
 #sudo docker build -t web-front-posthoop .
 ```
 

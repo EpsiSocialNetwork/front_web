@@ -1,19 +1,19 @@
 <template>
   <div class="bottom-bar">
-      <post class="post" v-if="post_window_enable" v-on:send="send"/>
+      <post_textarea class="post" v-if="post_window_enable" v-on:send="send"/>
       <span @click="$router.currentRoute.name!='home'?$router.push('/home'):{}" class="icon">🏠</span>
       <span @click="new_post()" class="icon">➕</span>
-      <span class="icon">🔍</span>
+      
   </div>
 </template>
 
 <script>
-import post from '@/components/post'
+import post_textarea from '@/components/post_textarea'
 import axios from 'axios'
 
 export default {
   name: 'bottom_bar',
-  components: { post },
+  components: { post_textarea },
   data () { return {post_window_enable:false,} },
   created : function() {},
   mounted : function(){},
@@ -24,7 +24,8 @@ export default {
     send:function(msg) {
       //TODO post message to api
       if(msg.length!=0){
-        let data = JSON.stringify({"uidUser":this.$root.user.uid,"text":msg});
+
+        let data = JSON.stringify({"uidUser":this.$root.keycloak.tokenParsed.user_id,"text":msg});
         let config = {
           method: 'post',
           url: 'https://post.mignon.chat/post',
@@ -34,13 +35,11 @@ export default {
           },
           data : data
         }
-
-
-        axios(config).then(response => console.log(JSON.stringify(response.data)))
+        axios(config).then(response => this.$emit('reload_after_send_post'))
         .catch(error => console.log(error))
+
+        
       }
-      console.log("---")
-      console.log(this.$root.keycloak.token)
       this.post_window_enable=false
     }
   },
