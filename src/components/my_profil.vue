@@ -59,7 +59,7 @@
       }
     },
     created : function() {
-      let config = { method: 'get', url: `http://post.mignon.chat/post/timeline/${this.$root.keycloak.tokenParsed.user_id}`, headers: {  'Authorization': `Bearer ${this.$root.keycloak.token}` } }
+      let config = { method: 'get', url: `http://post.mignon.chat/post/timeline/user?uids=${this.$root.keycloak.tokenParsed.user_id}`, headers: {  'Authorization': `Bearer ${this.$root.keycloak.token}` } }
       axios(config) .then( response => {
         this.post_counter=response.data.length
         this.my_post=response.data
@@ -140,7 +140,7 @@
 
   }
   .profil{
-    height:28vh;
+    height:31vh;
   }
   .user-picture img {
     margin: 0 50px;
@@ -158,7 +158,7 @@
   }
 
   .post-area {
-    height: 50vh;
+    height: 47vh;
     border: none;
     padding: 5px;
     overflow: scroll;

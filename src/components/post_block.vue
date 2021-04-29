@@ -44,13 +44,13 @@
         <span class="emoji_react" @click="emoji_react_show=!emoji_react_show" v-click-outside="emoji_react_close">
           <svg class="icon-3Gkjwa" aria-hidden="false" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M12.2512 2.00309C12.1677 2.00104 12.084 2 12 2C6.477 2 2 6.477 2 12C2 17.522 6.477 22 12 22C17.523 22 22 17.522 22 12C22 11.916 21.999 11.8323 21.9969 11.7488C21.3586 11.9128 20.6895 12 20 12C15.5817 12 12 8.41828 12 4C12 3.31052 12.0872 2.6414 12.2512 2.00309ZM10 8C10 6.896 9.104 6 8 6C6.896 6 6 6.896 6 8C6 9.105 6.896 10 8 10C9.104 10 10 9.105 10 8ZM12 19C15.14 19 18 16.617 18 14V13H6V14C6 16.617 8.86 19 12 19Z"></path><path d="M21 3V0H19V3H16V5H19V8H21V5H24V3H21Z" fill="currentColor"></path></svg>
           <div v-if="emoji_react_show" class="emoji_menu" >
-            <span v-for="item in emoji_list" @click="send_react(item)">{{item}}</span>
+            <b v-for="item in emoji_list" @click="send_react(item)">{{item}}</b>
           </div>
         </span>
         <span class="react">
-          <span v-for="item in reactions" class="react_item" @click="react_click(item)">
+          <b v-for="item in reactions" class="react_item" @click="react_click(item)">
             {{item.user.length}}{{item.text}}
-          </span>
+          </b>
         </span>
       </div>
       <div class="right">
@@ -119,7 +119,7 @@
     this.get_status_post()
 
     // Get Like for this post for this user
-    config = { method: 'get', url: `https://react.mignon.chat/${this.post.uid}/like/${this.$root.user.uid}`, headers: { } }
+    config = { method: 'get', url: `https://react.mignon.chat/${this.post.uid}/like/${this.$root.keycloak.tokenParsed.user_id}`, headers: { } }
     axios(config).then( response => response.data==1?this.liked=true:{})
     .catch( error => console.log(error))
 
@@ -192,7 +192,7 @@
       },
       delete_post:function(){
         const config = { method: 'delete', url: `https://post.mignon.chat/post/${this.post.uid}`, headers: {  'Authorization': `Bearer ${  this.$root.keycloak.token}` } }
-        axios(config).then( response => this.$router.go())
+        axios(config).then( response => this.$emit('reload_after_send_post'))
         .catch( error =>  console.error(`Error during GET profile for uid_user : ${this.post.uidUser}\n${error}`) )
       },
       get_profile:function(){
@@ -203,11 +203,11 @@
       like: function() {
         let config
         if(this.liked) {
-          config = { method: 'delete', url: `https://react.mignon.chat/${this.post.uid}/like/${this.$root.user.uid}`, headers: { } }
+          config = { method: 'delete', url: `https://react.mignon.chat/${this.post.uid}/like/${this.keycloak.tokenParsed.user_id}`, headers: { } }
           axios(config).then( response => {this.liked=false;this.like_counter--})
           .catch( error =>  console.log(error))
         } else {
-          config = { method: 'post', url: `https://react.mignon.chat/${this.post.uid}/like/${this.$root.user.uid}`, headers: { } }
+          config = { method: 'post', url: `https://react.mignon.chat/${this.post.uid}/like/${this.$root.keycloak.tokenParsed.user_id}`, headers: { } }
           axios(config).then( response => {this.liked=true;this.like_counter++})
           .catch(error => console.log(error))
         }
@@ -352,16 +352,24 @@
     background-color:#4B4A4E;
     border:0px solid black;
     border-radius: 5px;
-    right:0;
+    left:0;
+    display: flex;
+    flex-direction: row;
   }
-  .emoji_menu span:hover{
+  .emoji_menu b {
+    margin:0;
+    padding:0;
+    display: block;
+  }
+  .emoji_menu b:hover{
     background-color: #292424;   
   }
 
   .react_item{
     cursor: pointer;
     border:0px solid black;
-    border-radius: 20px;
+    border-radius: 5px;
+    padding:2px;
 
   }
   .react_item:hover{

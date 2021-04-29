@@ -3,7 +3,7 @@
     <top_bar/>
 
     <div id="infinite-list" class="post-area">
-      <post_block v-for="item in items" :key="item.uid" :post="item" class="post-block"/>
+      <post_block v-for="item in items_show" :key="item.uid" :post="item" class="post-block" @reload_after_send_post="reload_after_send_post"/>
     </div>
 
     <bottom_bar @reload_after_send_post="reload_after_send_post"/> 
@@ -22,11 +22,15 @@
     data () {
       return {
         loading: false,
-        items: []
+        items: [],
+        items_show: [],
+        tab: [],
+        following_user_uid: []
       }
     },
-    created : function() {
+    created : async function() {
     // Get first post
+    await this.get_following_user_uid()
     this.reload_after_send_post()
     
   },
@@ -44,24 +48,41 @@
     this.loadMore()
   },
   methods : {
-    reload_after_send_post(){
-      const config = { method: 'get', url: 'http://post.mignon.chat/post', headers: {  'Authorization': `Bearer ${this.$root.keycloak.token}` } }
+    shuffle(array) {
+      var currentIndex = array.length, temporaryValue, randomIndex;
+      // While there remain elements to shuffle...
+      while (0 !== currentIndex) {
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+        // And swap it with the current element.
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+      }
+      return array;
+    },
+    get_following_user_uid:async function(){      
+      const config = { method: 'get', url: `http://user.mignon.chat/user/${this.$root.keycloak.tokenParsed.user_id}/follow`, headers: {  'Authorization': `Bearer ${this.$root.keycloak.token}` } }
+      await axios(config) .then( response => this.following_user_uid=response.data)
+      .catch( error =>  console.log(error) )
+    },
+    async reload_after_send_post(){
+      let config = { method: 'get', url: `http://post.mignon.chat/post/timeline/user?uids=${[this.$root.keycloak.tokenParsed.user_id,...this.following_user_uid.map(e=>e.followUidUser)].join`,`}`, headers: {  'Authorization': `Bearer ${this.$root.keycloak.token}` } }
+      await axios(config) .then( response => this.items=response.data )
+      .catch( error =>  console.log(error) )
 
-      axios(config) .then( response => this.items=response.data.reverse())
-      .catch( error =>  console.log(error) )  
+      config = { method: 'get', url: `http://post.mignon.chat/post/`, headers: {  'Authorization': `Bearer ${this.$root.keycloak.token}` } }
+      axios(config) .then( response => {
+        this.tab = this.shuffle(response.data).filter(e=>this.items.reduce((r,v)=>v.uid==e.uid?r=false:r=r,true))
+        this.items=[...this.items,...this.tab.slice(0,this.items.length>this.tab.length?this.tab.length-1:this.items.length-1)].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt))
+        this.loadMore()
+      }).catch( error =>  console.log(error) )
     },
     loadMore () {
-
-      /*
       this.loading = true;
-      setTimeout(e => {
-        for (var i = 0; i < 20; i++) {
-          this.items.push('');
-        }
-        this.loading = false;
-      }, 50);
-      */
-      
+      this.items.splice(0,10).map(e=>this.items_show.push(e))
+      this.loading = false;
     }
   },
   watch : {}

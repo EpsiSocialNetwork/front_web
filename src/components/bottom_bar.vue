@@ -59,7 +59,9 @@ export default {
 }
 
 .icon {
-  max-height:70px;
+  max-height:90px;
+  cursor: pointer;
+  font-size: 30px;
 }
 .post {
   position: absolute;

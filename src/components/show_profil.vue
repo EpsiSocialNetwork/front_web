@@ -66,7 +66,7 @@
       config = { method: 'get', url: `http://user.mignon.chat/user/${this.$root.keycloak.tokenParsed.user_id}/follow`, headers: {  'Authorization': `Bearer ${this.$root.keycloak.token}` } }
       axios(config) .then( response => response.data.map(e=>e.followUidUser).includes(this.user_id)?this.is_follow=true:this.is_follow=false).catch( error =>  console.log(error) )
 
-      config = { method: 'get', url: `http://post.mignon.chat/post/timeline/${this.user_id}`, headers: {  'Authorization': `Bearer ${this.$root.keycloak.token}` } }
+      config = { method: 'get', url: `http://post.mignon.chat/post/timeline/user?uids=${this.user_id}`, headers: {  'Authorization': `Bearer ${this.$root.keycloak.token}` } }
       axios(config) .then( response => {
         this.post_counter=response.data.length
         this.my_post=response.data
@@ -158,7 +158,7 @@
 
   }
   .profil{
-    height:28vh;
+    height:31vh;
   }
   .user-picture img {
     margin: 0 50px;
@@ -176,7 +176,7 @@
   }
 
   .post-area {
-    height: 50vh;
+    height: 47vh;
     border: none;
     padding: 5px;
     overflow: scroll;
