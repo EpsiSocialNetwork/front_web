@@ -160,7 +160,7 @@
 
     },
     updated : function() {
-      this.get_profile()
+      //this.get_profile()
     },
     methods : {
       get_status_post: function(){

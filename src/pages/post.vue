@@ -60,22 +60,24 @@
         this.comment_window_enable=true
       },
       send_comment: function(text) {
-        const data = JSON.stringify({
-          "uidUser": this.$root.keycloak.tokenParsed.user_id,
-          "uidPost": this.post.uid,
-          "text": text
-        })
-        let config = {
-          method: 'post',
-          url: 'https://post.mignon.chat/comment',
-          headers: { 
-            'Authorization': `Bearer ${this.$root.keycloak.token}`, 
-            'Content-Type': 'application/json'
-          },
-          data : data
+        if(msg.length!=0){
+          const data = JSON.stringify({
+            "uidUser": this.$root.keycloak.tokenParsed.user_id,
+            "uidPost": this.post.uid,
+            "text": text
+          })
+          let config = {
+            method: 'post',
+            url: 'https://post.mignon.chat/comment',
+            headers: { 
+              'Authorization': `Bearer ${this.$root.keycloak.token}`, 
+              'Content-Type': 'application/json'
+            },
+            data : data
+          }
+          axios(config).then(response => this.load_comment())
+          .catch(error => console.log(error))
         }
-        axios(config).then(response => this.load_comment())
-        .catch(error => console.log(error))
         this.comment_window_enable=false
       }
     },
