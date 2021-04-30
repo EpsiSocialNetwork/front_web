@@ -23,7 +23,7 @@
 
 <script>
   import axios from 'axios'
-  import FormData from 'form-data'
+  //import FormData from 'form-data'
 
 
   export default {
@@ -46,25 +46,8 @@
     },
     methods : {
       upload_file:function(){
-        var myHeaders = new Headers();
-        myHeaders.append("Authorization", "Client-ID cd407d8b957f6a9")
-        myHeaders.append("Cookie", "IMGURSESSION=172bfc2b1d03d6bfec5798eada3e6d36; _nc=1")
 
-        var formdata = new FormData()
-        formdata.append("image", "R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7")
-        //formdata.append("image", fileInput.files[0], "/D:/Image/1800px-gnu_bash_logo.png");
 
-        var requestOptions = {
-          method: 'POST',
-          headers: myHeaders,
-          body: formdata,
-          redirect: 'follow'
-        }
-
-        fetch("https://api.imgur.com/3/image", requestOptions)
-        .then(response => response.text())
-        .then(result => console.log(result))
-        .catch(error => console.log('error', error))
 
       },
       handleFileUpload:function(){
@@ -72,29 +55,46 @@
       },
       login: function() {
 
-        //this.upload_file()
-        let data = JSON.stringify({
-          "uid": this.$root.keycloak.tokenParsed.user_id,
-          "email": this.email,
-          "password": "mySecurePassword",
-          "username": this.username,
-          "fullname": this.fullname,
-          "description": this.description,
-          "pictureProfile": this.pictureProfile,
-          "codeCountry": this.codeCountry
-        })
+        const url = "https://api.cloudinary.com/v1_1/epsi/image/upload";
+        const formData = new FormData();
+        formData.append("file", this.file);
+        formData.append("upload_preset", "jarovrcw");
 
-        let config = {
-          method: 'post',
-          url: `https://user.mignon.chat/user/`,
-          headers: { 'Authorization': `Bearer ${this.$root.keycloak.token}`, 'Content-Type': 'application/json'},
-          data : data
-        }
-        axios(config).then( response => {
-          console.log(JSON.stringify(response.data))
-          this.$router.push('/home')
+        fetch(url, {
+          method: "POST",
+          body: formData
         })
-        .catch( error =>  console.log(error))
+        .then((response) => {
+          return response.text();
+        })
+        .then(res => {
+          
+          let data = JSON.stringify({
+            "uid": this.$root.keycloak.tokenParsed.user_id,
+            "email": this.email,
+            "password": "mySecurePassword",
+            "username": this.username,
+            "fullname": this.fullname,
+            "description": this.description,
+            "pictureProfile": JSON.parse(res).secure_url,
+            "codeCountry": this.codeCountry
+          })
+
+          let config = {
+            method: 'post',
+            url: `https://user.mignon.chat/user/`,
+            headers: { 'Authorization': `Bearer ${this.$root.keycloak.token}`, 'Content-Type': 'application/json'},
+            data : data
+          }
+          axios(config).then( response => {
+            console.log(JSON.stringify(response.data))
+            this.$router.push('/home')
+          })
+          .catch( error =>  console.log(error))
+          
+        });
+
+        
         
       }
     },

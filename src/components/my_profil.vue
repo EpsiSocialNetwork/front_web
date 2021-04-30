@@ -4,7 +4,7 @@
       <div class="user-picture">
         <!-- <img @click="remove" class="edit" src="@/assets/edit.svg"/> -->
 
-        <img class="icon-profil" src="https://picsum.photos/seed/picsum/128/128" width="80" height="80"/>
+        <img class="icon-profil" :src="pictureProfile" width="80" height="80"/>
 
         <!-- <img @click="remove" class="trash" src="@/assets/trash.svg"/> -->
 
@@ -56,6 +56,7 @@
         my_post:[],
         description:'',
         flag:'',
+        pictureProfile:'https://picsum.photos/seed/picsum/128/128'
       }
     },
     created : function() {
@@ -82,6 +83,7 @@
         }
         this.description=response.data.description
         this.flag=response.data.codeCountry
+        this.pictureProfile=response.data.pictureProfile.startsWith('http')?response.data.pictureProfile:this.pictureProfile
       })
       .catch( error =>  console.log(error) )
 
@@ -91,6 +93,7 @@
     },
     methods : {
       logout: function() {
+        new Audio(require('@/assets/nooo.swf.mp3')).play()
         this.$root.keycloak.logout()
         this.$router.push('/')
       },

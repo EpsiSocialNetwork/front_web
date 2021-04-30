@@ -23,6 +23,7 @@ export default {
     },
     send:function(msg) {
       //TODO post message to api
+      new Audio(require('@/assets/discord-notification.mp3')).play()
       if(msg.length!=0){
 
         let data = JSON.stringify({"uidUser":this.$root.keycloak.tokenParsed.user_id,"text":msg});

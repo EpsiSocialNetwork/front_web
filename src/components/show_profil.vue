@@ -2,7 +2,7 @@
   <div>
     <div class="profil">
       <div class="user-picture">
-        <img class="icon-profil" src="https://picsum.photos/seed/picsum/128/128" width="80" height="80"/>
+        <img class="icon-profil" :src="pictureProfile" width="80" height="80"/>
       </div>
       <div class="info-user">
         <span class="info-user_fullname">
@@ -51,6 +51,7 @@
         is_follow:false,
         description:'',
         flag:'',
+        pictureProfile:'https://picsum.photos/seed/picsum/128/128'
       }
     },
     created :async function() {
@@ -59,6 +60,7 @@
         this.user_id=response.data.uid
         this.description=response.data.description
         this.flag=response.data.codeCountry
+        this.pictureProfile=response.data.pictureProfile.startsWith('http')?response.data.pictureProfile:this.pictureProfile        
       })
       .catch( error =>  console.log(error) )
 

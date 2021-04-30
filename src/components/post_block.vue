@@ -1,12 +1,16 @@
 <template>
   <div class="post_block">
+    <div class="clipboard_check" v-if="clipboard_check">
+      <img src="https://media.tenor.com/images/fe8e5fe2fa93f2d0061758dc8f80446d/tenor.gif">
+      <h2>Copier dans le press papier</h2>
+    </div>
     <router-link style="text-decoration: none; color: inherit;" :to="`/post/${post.uid}`">
       <div class="clickable_post_part">
         <!-- HEADER POST -->
         <div class="header-post">
           <div class="user-info">
             <router-link style="text-decoration: none; color: inherit;" :to="`/${profile.fullname}`">
-              <span><img class="icon-profil" :src="profile==undefined?profile.pictureProfile:default_picture" width="40" height="40"/></span>
+              <span><img class="icon-profil" :src="pictureProfile" width="40" height="40"/></span>
             </router-link>
             <router-link style="text-decoration: none; color: inherit;" :to="`/${profile.fullname}`">
               <span class="user-info_fullname">{{profile.fullname}}</span>
@@ -94,7 +98,7 @@
     data () {
       return {
         profile:{},
-        default_picture:'https://picsum.photos/seed/picsum/128/128',
+        pictureProfile:'https://picsum.photos/seed/picsum/128/128',
         post_time:0,
         tags:[],
         number_comments:0,
@@ -103,6 +107,7 @@
         liked:false,
         post_status:{},
         edit_show:false,
+        clipboard_check:false,
         emoji_react_show:false,
         emoji_list:['👍','👎','😍','😆','😈','😃','😢','😝','😱','🤔','😕','🎊','⚠','👏'],
         reactions:[],
@@ -168,9 +173,12 @@
         .catch( error =>console.log(error))
       },
       share_post:function(){
+        this.clipboard_check=true
         navigator.permissions.query({name: "clipboard-write"}).then(result => {
-          if (result.state == "granted" || result.state == "prompt") 
+          if (result.state == "granted" || result.state == "prompt"){
             navigator.clipboard.writeText(`${window.location.origin}/post/${this.post.uid}`).then(() =>{}, ()=> {})
+            setTimeout(()=>this.clipboard_check=false, 1500)
+          }
         })
       },
       react_click: function(react){
@@ -185,6 +193,7 @@
 
       },
       send_react: function(react){
+        new Audio(require('@/assets/oss-117-oh-si-cest-rigolo.mp3')).play()
         const config = {method: 'post',url: `https://react.mignon.chat/${this.post.uid}/react/${this.$root.keycloak.tokenParsed.user_id}/${react}`,headers: { }}
 
         axios(config).then( response => this.get_status_post())
@@ -197,13 +206,18 @@
       },
       get_profile:function(){
         const config = { method: 'get', url: `https://user.mignon.chat/user/${this.post.uidUser}`, headers: {  'Authorization': `Bearer ${  this.$root.keycloak.token}` } }
-        axios(config).then( response => this.profile=response.data)
+        axios(config).then( response => {
+          this.profile=response.data
+          if(response.data.pictureProfile)
+            this.pictureProfile=response.data.pictureProfile.startsWith('http')?response.data.pictureProfile:this.pictureProfile
+        })
         .catch( error =>  console.error(`Error during GET profile for uid_user : ${this.post.uidUser}\n${error}`) )
       },
       like: function() {
+        new Audio(require('@/assets/admiral-ackbar-its-a-trap.mp3')).play()
         let config
         if(this.liked) {
-          config = { method: 'delete', url: `https://react.mignon.chat/${this.post.uid}/like/${this.keycloak.tokenParsed.user_id}`, headers: { } }
+          config = { method: 'delete', url: `https://react.mignon.chat/${this.post.uid}/like/${this.$root.keycloak.tokenParsed.user_id}`, headers: { } }
           axios(config).then( response => {this.liked=false;this.like_counter--})
           .catch( error =>  console.log(error))
         } else {
@@ -381,5 +395,16 @@
     padding: 0;
     margin: 0;
   }
+  .clipboard_check{
+    position: absolute;
+    top:50%;
+    right:50%;
+    transform: translateX(50%);
+    background-color: white;
+    width: 45%;
+    border:0px solid black;
+    border-radius: 15px;
+    z-index: 999;
+  } 
 
 </style>
