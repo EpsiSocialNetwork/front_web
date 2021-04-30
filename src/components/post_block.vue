@@ -193,7 +193,7 @@
 
       },
       send_react: function(react){
-        new Audio(require('@/assets/oss-117-oh-si-cest-rigolo.mp3')).play()
+        
         const config = {method: 'post',url: `https://react.mignon.chat/${this.post.uid}/react/${this.$root.keycloak.tokenParsed.user_id}/${react}`,headers: { }}
 
         axios(config).then( response => this.get_status_post())
