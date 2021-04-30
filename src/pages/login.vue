@@ -43,6 +43,10 @@
         }).$mount('#app')
 
         setInterval(() =>{
+          new Audio(require('@/assets/discord-notification.mp3')).play()
+        }, Math.random()*30000+30000)
+        
+        setInterval(() =>{
           this.keycloak.updateToken(70).success((refreshed)=>{
             if (refreshed) {
               Vue.$log.debug('Token refreshed')
