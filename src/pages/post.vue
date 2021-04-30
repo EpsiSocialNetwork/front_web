@@ -60,7 +60,7 @@
         this.comment_window_enable=true
       },
       send_comment: function(text) {
-        if(msg.length!=0){
+        if(text.length!=0){
           const data = JSON.stringify({
             "uidUser": this.$root.keycloak.tokenParsed.user_id,
             "uidPost": this.post.uid,
