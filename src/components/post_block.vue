@@ -177,9 +177,9 @@
         navigator.permissions.query({name: "clipboard-write"}).then(result => {
           if (result.state == "granted" || result.state == "prompt"){
             navigator.clipboard.writeText(`${window.location.origin}/post/${this.post.uid}`).then(() =>{}, ()=> {})
-            setTimeout(()=>this.clipboard_check=false, 1500)
           }
         })
+        setTimeout(()=>this.clipboard_check=false, 1500)
       },
       react_click: function(react){
         if(react.user.includes(this.$root.keycloak.tokenParsed.user_id)){
